@@ -67,11 +67,11 @@ python dca.py $EXCHANGE $YOUR_API_KEY $YOUR_API_SECRET $DAILY_INVESTMENT $FIAT $
 - `$HH` defines the hour at which the script will perform the
   investment.
 
-Example for crypto.com/exchange, with 4% fees, using 20 USDT/day, 
+Example for crypto.com/exchange, with 0.4% fees, using 20 USDT/day, 
 and buying every day at 12:00:
 
 ```bash
-python dca.py cryptocom XXXX ZZZZ 20 USDT 0.04 12
+python dca.py cryptocom XXX ZZZ 20 USDT 0.004 12
 ```
 
 ## Attributions
