@@ -51,7 +51,7 @@ hour. In order to perform its task, it must not be stopped
 once launched.
 
 ```bash
-python dca.py $EXCHANGE $YOUR_API_KEY $YOUR_API_SECRET $DAILY_INVESTMENT $FIAT $FEES $HH
+python src/dca.py $EXCHANGE $YOUR_API_KEY $YOUR_API_SECRET $DAILY_INVESTMENT $FIAT $FEES $HH
 ```
 
 - `$EXCHANGE` defines the exchange used to perform the purchases 
@@ -71,7 +71,16 @@ Example for crypto.com/exchange, with 0.4% fees, using 20 USDT/day,
 and buying every day at 12:00:
 
 ```bash
-python dca.py cryptocom XXX ZZZ 20 USDT 0.004 12
+python src/dca.py cryptocom XXX ZZZ 20 USDT 0.004 12
+```
+
+### The records
+
+In order to view the investments made by the script, you can 
+use the following command to print the summed table:
+
+```bash
+python src/record.py
 ```
 
 ## Attributions
