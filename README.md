@@ -1,7 +1,5 @@
 [![Generic badge](https://img.shields.io/badge/license-Unlicense-green.svg)](https://shields.io/)
 
-# DCA-Crypto
-
 <div align="center">
 	<br>
 	<br>
@@ -77,10 +75,12 @@ python dca.py cryptocom XXXX ZZZZ 20 USDT 0.04 12
 
 ## Attributions
 
-<div>
+- <div>
 	Icon made by 
 	<a href="https://www.flaticon.com/authors/flat-icons" title="Flat Icons">Monkik - Flat Icons</a> 
 	from 
 	<a href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com</a>
 	.
-</div>
+  </div>
+
+- [ccxt API](https://github.com/ccxt/ccxt)).
