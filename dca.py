@@ -6,9 +6,10 @@ import sys
 import time
 
 
-def check_api_keys():
-    if len(sys.argv) != 3:
-        print("Error: you should pass API key and secret.") 
+def check_argv():
+    if len(sys.argv) != 8:
+        print("Error: format is - python dca.py $EXCHANGE $YOUR_API_KEY " 
+              "$YOUR_API_SECRET $DAILY_INVESTMENT $FIAT $FEES $HH")
         exit()
 
 
@@ -21,17 +22,17 @@ def check_weights(df):
 
 def fetch_variation(symbol):
     print("Fetching variation\t%s" % symbol)
-    return cryptocom.fetch_ticker("%s/%s" % (symbol, FIAT))["percentage"]
+    return EXCHANGE.fetch_ticker("%s/%s" % (symbol, FIAT))["percentage"]
 
 
 def fetch_price(symbol):
     print("Fetching price\t\t%s" % symbol)
-    return cryptocom.fetch_ticker("%s/%s" % (symbol, FIAT))["bid"]
+    return EXCHANGE.fetch_ticker("%s/%s" % (symbol, FIAT))["bid"]
 
 
 def place_purchase(symbol, amount):
     print("Purchasing\t\t%f %s" % (amount, symbol))
-    cryptocom.create_market_buy_order("%s/%s" % (symbol, FIAT), amount)
+    EXCHANGE.create_market_buy_order("%s/%s" % (symbol, FIAT), amount)
 
 
 def job():
@@ -69,25 +70,26 @@ def wait():
 
 
 if __name__ == '__main__':
+    check_argv()
+
     # Total of the purchase to be made, in FIAT,
     # including the FEES.
-    TOTAL_PURCHASE = 12.5 
-    FIAT = "USDT"
-    FEES = 0.04
-    # Often, minimum purchase on the platform is 1ct / FEES
+    TOTAL_PURCHASE = float(sys.argv[4]) 
+    FIAT = sys.argv[5]
+    FEES = float(sys.argv[6])
+    # Often, minimum purchase on a platform is 1ct / FEES
     # (depending on the number of decimal allowed).
     MIN_PURCHASE = 0.01 / FEES
     # The currencies to buy, and their weight.
     PATH = "currencies.json"
     # To center the final weight.
     CENTER = -100
-
-    check_api_keys()
-    cryptocom = ccxt.cryptocom({
-        "apiKey": sys.argv[1],
-        "secret": sys.argv[2],
+    # Connect to the exchange.
+    EXCHANGE = getattr(ccxt, sys.argv[1])({
+        "apiKey": sys.argv[2],
+        "secret": sys.argv[3],
         })
-    job()
-    schedule.every().day.at("12:00").do(job)
+
+    schedule.every().day.at(argv[7] + ":00").do(job)
     wait()
 
