@@ -6,7 +6,7 @@
 	<img src="res/icon.png" width="200" height="200">
 	<h1>DCA-Crypto</h1>
 	<p>
-    <b>Simple DCA script for cryptocurrency using the ccxt API.</b>
+    <b>Simple DCA script for cryptocurrency using the CCXT API.</b>
 	</p>
 	<br>
 	<br>
@@ -56,7 +56,7 @@ python dca.py $EXCHANGE $YOUR_API_KEY $YOUR_API_SECRET $DAILY_INVESTMENT $FIAT $
 
 - `$EXCHANGE` defines the exchange used to perform the purchases 
   (the list of the available exchanges is available on 
-  [ccxt](https://github.com/ccxt/ccxt)).
+  [CCXT](https://github.com/ccxt/ccxt)).
 - `$YOUR_API_KEY` and `$YOUR_API_SECRET` can be obtained on
   the exchange and allow its API level access. 
 - `$DAILY_INVESTMENT` defines your daily investment quantity
@@ -83,4 +83,4 @@ python dca.py cryptocom XXXX ZZZZ 20 USDT 0.04 12
 	<a href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com</a>
   </div>
 
-- [ccxt API](https://github.com/ccxt/ccxt)
+- [CCXT API](https://github.com/ccxt/ccxt)
