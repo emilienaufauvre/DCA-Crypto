@@ -1,9 +1,12 @@
 import ccxt
 import datetime 
+import os
 import pandas as pd 
 import schedule
 import sys
 import time
+
+from _global import *
 
 
 def check_argv():
@@ -18,6 +21,11 @@ def check_weights(df):
         print("Error: the sum of the weights is not 1 (%f for %d tokens)." % 
                 (sum(df["weight"]), len(df)))
         exit()
+
+
+def create_output_dir():
+    if not os.path.exists(PATH_OUTPUT):
+        os.makedirs(PATH_OUTPUT)
 
 
 def fetch_variation(symbol):
@@ -43,18 +51,21 @@ def job():
     date = datetime.datetime.now()
     print("----------------------------------------------\n%s\n" % str(date))
 
-    df = pd.read_json(PATH).transpose()
+    df = pd.read_json(PATH_INPUT).transpose()
+
     check_weights(df)
 
-    df["price    FIAT"] = [fetch_price(symbol) for symbol in df["symbol"]]
-    df["variation   %"] = [fetch_variation(symbol) for symbol in df["symbol"]]
-    df["variation bis"] = df["variation   %"] * df["weight"] + CENTER 
-    df["purchase FIAT"] = df["variation bis"] / df["variation bis"].sum() * TOTAL_PURCHASE
-    df["purchase real"] = df["purchase FIAT"].apply(lambda p: max(p, MIN_PURCHASE))
-    df["amount NATIVE"] = df["purchase real"] / df["price    FIAT"]
-    df["amount real  "] = df["amount NATIVE"] * (1 - FEES) 
+    df[COL_PRIC] = [fetch_price(symbol) for symbol in df[COL_SYMB]]
+    df[COL_VAR1] = [fetch_variation(symbol) for symbol in df[COL_SYMB]]
+    df[COL_VAR2] = df[COL_WEIG] * (df[COL_VAR1] + 100) 
+    df[COL_PUR1] = df[COL_VAR2] / sum(df[COL_VAR2]) * TOTAL_PURCHASE
+    df[COL_PUR2] = df[COL_PUR1].apply(lambda p: max(p, MIN_PURCHASE))
+    df[COL_AMO1] = df[COL_PUR2] / df[COL_PRIC]
+    df[COL_AMO2] = df[COL_AMO1] * (1 - FEES) 
 
-    df.to_csv("%s.csv" % date.strftime("dca_%d_%m_%Y__%H_%M_%S"))
+    df.index.name = COL_NAME 
+    df.drop(COL_VAR2, axis=1, inplace=True)
+    df.to_csv("%s/%s.csv" % (PATH_OUTPUT, date.strftime(FORMAT_OUTPUT)))
     df.apply(lambda r: place_purchase(r["symbol"], r["amount NATIVE"]), axis=1)
 
     print(df.to_markdown())
@@ -80,16 +91,14 @@ if __name__ == '__main__':
     # Often, minimum purchase on a platform is 1ct / FEES
     # (depending on the number of decimal allowed).
     MIN_PURCHASE = 0.01 / FEES
-    # The currencies to buy, and their weight.
-    PATH = "currencies.json"
-    # To center the final weight.
-    CENTER = -100
     # Connect to the exchange.
     EXCHANGE = getattr(ccxt, sys.argv[1])({
         "apiKey": sys.argv[2],
         "secret": sys.argv[3],
         })
 
-    schedule.every().day.at(argv[7] + ":00").do(job)
+    create_output_dir()
+
+    schedule.every().day.at(sys.argv[7] + ":00").do(job)
     wait()
 
