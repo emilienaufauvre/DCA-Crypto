@@ -83,4 +83,4 @@ python dca.py cryptocom XXXX ZZZZ 20 USDT 0.04 12
 	.
   </div>
 
-- [ccxt API](https://github.com/ccxt/ccxt)).
+- [ccxt API](https://github.com/ccxt/ccxt).
