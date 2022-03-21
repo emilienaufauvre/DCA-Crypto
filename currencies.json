@@ -1,0 +1,117 @@
+{
+    "Bitcoin": {
+        "symbol": "BTC",
+        "weight": 0.1
+    },
+    "Ethereum": {
+        "symbol": "ETH",
+        "weight": 0.1
+    },
+
+
+    "Cardano": {
+        "symbol": "ADA",
+        "weight": 0.075
+    },
+    "Avalanche": {
+        "symbol": "AVAX",
+        "weight": 0.075
+    },
+    "Polkadot": {
+        "symbol": "DOT",
+        "weight": 0.075
+    },
+
+
+    "Cronos": {
+        "symbol": "CRO",
+        "weight": 0.05
+    },
+
+
+    "Litecoin": {
+        "symbol": "LTC",
+        "weight": 0.025
+    },
+    "Cosmos": {
+        "symbol": "ATOM",
+        "weight": 0.025
+    },
+    "Near": {
+        "symbol": "NEAR",
+        "weight": 0.025
+    },
+    "Chainlink": {
+        "symbol": "LINK",
+        "weight": 0.025
+    },
+    "Decentralized Mana": {
+        "symbol": "MANA",
+        "weight": 0.025
+    },
+    "Sandbox": {
+        "symbol": "SAND",
+        "weight": 0.025
+    },
+    "Filecoin": {
+        "symbol": "FIL",
+        "weight": 0.025
+    },
+    "AAVE": {
+        "symbol": "AAVE",
+        "weight": 0.025
+    },
+    "Basic Attention Token": {
+        "symbol": "BAT",
+        "weight": 0.025
+    },
+    "Chiliz": {
+        "symbol": "CHZ",
+        "weight": 0.025
+    },
+    "Compound": {
+        "symbol": "COMP",
+        "weight": 0.025
+    },
+    "Curve DAO": {
+        "symbol": "CRV",
+        "weight": 0.025
+    },
+    "Enjin": {
+        "symbol": "ENJ",
+        "weight": 0.025
+    },
+    "Zilliqa": {
+        "symbol": "ZIL",
+        "weight": 0.025
+    },
+    "VeChain": {
+        "symbol": "VET",
+        "weight": 0.025
+    },
+    "Theta Network": {
+        "symbol": "THETA",
+        "weight": 0.025
+    },
+    "Ren": {
+        "symbol": "REN",
+        "weight": 0.025
+    },
+    "ICON": {
+        "symbol": "ICX",
+        "weight": 0.025
+    },
+
+    "Stellar": {
+        "symbol": "XLM",
+        "weight": 0.025
+    },
+    "EOS": {
+        "symbol": "EOS",
+        "weight": 0.025
+    },
+    "Algorand": {
+        "symbol": "ALGO",
+        "weight": 0.025
+    },
+}
