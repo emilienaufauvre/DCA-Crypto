@@ -1,4 +1,19 @@
+[![Generic badge](https://img.shields.io/badge/license-Unlicense-green.svg)](https://shields.io/)
+
 # DCA-Crypto
+
+<div align="center">
+	<br>
+	<br>
+	<img src="res/icon.png" width="200" height="200">
+	<h1>DCA-Crypto</h1>
+	<p>
+    <b>Simple DCA script for cryptocurrency using the ccxt API.</b>
+	</p>
+	<br>
+	<br>
+	<br>
+</div>
 
 This simple script will invest, every day, a given quantity of money on the 
 different currencies listed in a .json. These currencies 
@@ -10,7 +25,7 @@ records of your investment as a .csv file.
 
 ## Usage
 
-### Currencies
+### Your currencies
 
 You have to modify the `currencies.json` file depending on
 the objectives of your investment.
@@ -59,3 +74,13 @@ and buying every day at 12:00:
 ```bash
 python dca.py cryptocom XXXX ZZZZ 20 USDT 0.04 12
 ```
+
+## Attributions
+
+<div>
+	Icon made by 
+	<a href="https://www.flaticon.com/authors/flat-icons" title="Flat Icons">Monkik - Flat Icons</a> 
+	from 
+	<a href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com</a>
+	.
+</div>
