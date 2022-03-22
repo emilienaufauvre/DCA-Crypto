@@ -57,7 +57,7 @@ def job():
 
     df[COL_PRIC] = [fetch_price(symbol) for symbol in df[COL_SYMB]]
     df[COL_VAR1] = [fetch_variation(symbol) for symbol in df[COL_SYMB]]
-    df[COL_VAR2] = df[COL_WEIG] * (df[COL_VAR1] + 100) 
+    df[COL_VAR2] = df[COL_VAR1] * df[COL_WEIG] - 100 
     df[COL_PUR1] = df[COL_VAR2] / sum(df[COL_VAR2]) * TOTAL_PURCHASE
     df[COL_PUR2] = df[COL_PUR1].apply(lambda p: max(p, MIN_PURCHASE))
     df[COL_AMO1] = df[COL_PUR2] / df[COL_PRIC]
@@ -66,7 +66,7 @@ def job():
     df.index.name = COL_NAME 
     df.drop(COL_VAR2, axis=1, inplace=True)
     df.to_csv("%s/%s.csv" % (PATH_OUTPUT, date.strftime(FORMAT_OUTPUT)))
-    df.apply(lambda r: place_purchase(r["symbol"], r["amount NATIVE"]), axis=1)
+    df.apply(lambda r: place_purchase(r[COL_SYMB], r[COL_AMO1]), axis=1)
 
     print(df.to_markdown())
 
