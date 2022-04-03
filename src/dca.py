@@ -28,14 +28,9 @@ def create_output_dir():
         os.makedirs(PATH_OUTPUT)
 
 
-def fetch_variation(symbol):
-    print("Fetching variation\t%s" % symbol)
-    return EXCHANGE.fetch_ticker("%s/%s" % (symbol, FIAT))["percentage"]
-
-
-def fetch_price(symbol):
-    print("Fetching price\t\t%s" % symbol)
-    return EXCHANGE.fetch_ticker("%s/%s" % (symbol, FIAT))["bid"]
+def fetch_info(symbol):
+    print("Fetching informations\t%s" % symbol)
+    return EXCHANGE.fetch_ticker("%s/%s" % (symbol, FIAT))
 
 
 def place_purchase(symbol, amount):
@@ -52,11 +47,12 @@ def job():
     print("----------------------------------------------\n%s\n" % str(date))
 
     df = pd.read_json(PATH_INPUT).transpose()
-
     check_weights(df)
 
-    df[COL_PRIC] = [fetch_price(symbol) for symbol in df[COL_SYMB]]
-    df[COL_VAR1] = [fetch_variation(symbol) for symbol in df[COL_SYMB]]
+    info = [fetch_info(symbol) for symbol in df[COL_SYMB]]
+
+    df[COL_PRIC] = [i["bid"] for i in info]
+    df[COL_VAR1] = [i["percentage"] for i in info]
     df[COL_VAR2] = df[COL_VAR1] * df[COL_WEIG] - 100 
     df[COL_PUR1] = df[COL_VAR2] / sum(df[COL_VAR2]) * TOTAL_PURCHASE
     df[COL_PUR2] = df[COL_PUR1].apply(lambda p: max(p, MIN_PURCHASE))
