@@ -40,7 +40,7 @@ def place_purchase(symbol, amount):
 
 def job():
     """
-    Compute the purchase to be made, and place them on
+    Compute the purchases to be made, and place them on
     the market.
     """
     date = datetime.datetime.now()
