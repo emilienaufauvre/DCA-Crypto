@@ -5,6 +5,7 @@ import pandas as pd
 import schedule
 import sys
 import time
+import numpy as np
 
 from _global import *
 
@@ -49,21 +50,31 @@ def job():
     df = pd.read_json(PATH_INPUT).transpose()
     check_weights(df)
 
-    info = [fetch_info(symbol) for symbol in df[COL_SYMB]]
+    info = [fetch_info(s) for s in df[COL_SYMB]]
 
-    df[COL_PRIC] = [i["bid"] for i in info]
-    df[COL_VAR1] = [i["percentage"] for i in info]
-    df[COL_VAR2] = df[COL_VAR1] * df[COL_WEIG] - 100 
+    df[COL_PRIC] = [float(i["info"][0]["a"]) for i in info]
+    df[COL_VAR1] = [float(i["info"][0]["c"]) for i in info]
+    df[COL_VAR2] = df[COL_WEIG]#df[COL_VAR1] * df[COL_WEIG] - 100 
     df[COL_PUR1] = df[COL_VAR2] / sum(df[COL_VAR2]) * TOTAL_PURCHASE
-    df[COL_PUR2] = df[COL_PUR1].apply(lambda p: max(p, MIN_PURCHASE))
+    df[COL_PUR2] = np.maximum(df[COL_PUR1], (df[COL_MINI] * df[COL_PRIC]))
     df[COL_AMO1] = df[COL_PUR2] / df[COL_PRIC]
     df[COL_AMO2] = df[COL_AMO1] * (1 - FEES) 
 
     df.index.name = COL_NAME 
     df.drop(COL_VAR2, axis=1, inplace=True)
-    df.to_csv("%s/%s.csv" % (PATH_OUTPUT, date.strftime(FORMAT_OUTPUT)))
-    df.apply(lambda r: place_purchase(r[COL_SYMB], r[COL_AMO1]), axis=1)
 
+    for i, r in df.iterrows():
+        try:
+            # Buy the currency using the computed values.
+            place_purchase(r[COL_SYMB], r[COL_AMO1])
+        except Exception as e:
+            print(e)
+            # No assets bought.
+            df.loc[i, [COL_PUR2]] = 0
+            df.loc[i, [COL_AMO1]] = 0
+            df.loc[i, [COL_AMO2]] = 0
+
+    df.to_csv("%s/%s.csv" % (PATH_OUTPUT, date.strftime(FORMAT_OUTPUT)))
     print(df.to_markdown())
 
 
@@ -84,9 +95,6 @@ if __name__ == '__main__':
     TOTAL_PURCHASE = float(sys.argv[4]) 
     FIAT = sys.argv[5]
     FEES = float(sys.argv[6])
-    # Often, minimum purchase on a platform is 1ct / FEES
-    # (depending on the number of decimal allowed).
-    MIN_PURCHASE = 0.01 / FEES
     # Connect to the exchange.
     EXCHANGE = getattr(ccxt, sys.argv[1])({
         "apiKey": sys.argv[2],
@@ -95,6 +103,7 @@ if __name__ == '__main__':
 
     create_output_dir()
 
+    job()
     schedule.every().day.at(sys.argv[7] + ":00").do(job)
     wait()
 
